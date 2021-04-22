@@ -2,10 +2,13 @@
 
 namespace Coredump\Frontend;
 
+use Coredump\Frontend\Console\Commands\JddPackageUpdate;
 use Illuminate\Support\ServiceProvider;
 
 class FrontendServiceProvider extends ServiceProvider
 {
+    const PluginName = 'coredump/frontend';
+
     /**
      * Bootstrap the application services.
      */
@@ -17,12 +20,13 @@ class FrontendServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'frontend');
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'frontend');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-        $this->loadRoutesFrom(__DIR__.'/../routes/routes.php');
+        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+        $this->loadAssets();
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__.'/../config/config.php' => config_path('frontend.php'),
-            ], 'config');
+            ], static::PluginName . '/config');
 
             // Publishing the views.
             /*$this->publishes([
@@ -31,8 +35,8 @@ class FrontendServiceProvider extends ServiceProvider
 
             // Publishing assets.
             $this->publishes([
-                __DIR__.'/../resources/assets' => public_path('vendor/frontend'),
-            ], 'assets');
+                __DIR__.'/../dist' => public_path('modules/' . static::PluginName),
+            ], static::PluginName . '/assets');
 
             // Publishing the translation files.
             /*$this->publishes([
@@ -40,7 +44,9 @@ class FrontendServiceProvider extends ServiceProvider
             ], 'lang');*/
 
             // Registering package commands.
-            // $this->commands([]);
+            $this->commands([
+                JddPackageUpdate::class,
+            ]);
         }
     }
 
@@ -56,5 +62,17 @@ class FrontendServiceProvider extends ServiceProvider
         $this->app->singleton('frontend', function () {
             return new Frontend;
         });
+    }
+
+    private function loadAssets()
+    {
+        foreach (glob(__DIR__ . '/../dist/js/*.js') as $filename) {
+            $name = \basename($filename);
+            app('config')->push('plugins.javascript', '/modules/' . self::PluginName . '/js/' . $name);
+        }
+        foreach (glob(__DIR__ . '/../dist/css/*.css') as $filename) {
+            $name = \basename($filename);
+            app('config')->push('plugins.css', '/modules/' . self::PluginName . '/css/' . $name);
+        }
     }
 }
