@@ -24,8 +24,7 @@ Vue.use(queue)
 setTimeout(() => {
   queue.eventBus.notify('router', {path: '/login'})
 }, 0)
-Vue.prototype.$complete = (data) => {
-  console.log(data)
+Vue.prototype.$complete = () => {
   setTimeout(() => {
     queue.eventBus.notify('router', {path: '/about'})
   }, 200)
