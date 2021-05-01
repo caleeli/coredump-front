@@ -7,6 +7,7 @@ Vue.config.productionTip = false
 // Import Bootstrap an BootstrapVue CSS files (order is important)
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import router from './router'
 
 // Mock translations
 const trans = require('../resources/lang/es.json')
@@ -18,5 +19,6 @@ Vue.prototype.__ = (text, ...args) => {
 Vue.use(BootstrapVue)
 
 new Vue({
-  render: h => h(App),
+  router,
+  render: h => h(App)
 }).$mount('#app')
