@@ -1,10 +1,30 @@
 <template>
   <div id="app">
-    <router-view/>
+    <transition name="fade">
+      <router-view />
+    </transition>
   </div>
 </template>
 
+<script>
+export default {
+  mounted() {
+    this.$listen("router", ({path}) => {
+      if (this.$router.currentRoute.path !== path) {
+        this.$router.push(path)
+      }
+    })
+  },
+}
+</script>
+
 <style>
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  height: 100vh;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -14,5 +34,18 @@
 }
 input {
   filter: none;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition-duration: 0.4s;
+  transition-property: opacity;
+  transition-timing-function: ease;
+}
+.fade-leave-to {
+  display: none;
+}
+.fade-enter,
+.fade-leave-active {
+  opacity: 0
 }
 </style>

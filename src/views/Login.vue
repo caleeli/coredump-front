@@ -7,7 +7,7 @@
       img-alt="Card image"
       img-top
     >
-      <b-form>
+      <b-form @submit.prevent="$complete(form)">
         <b-form-group :label="__('User')">
           <b-form-input
             v-model="form.username"
@@ -27,7 +27,7 @@
         </b-form-group>
 
         <b-form-group>
-          <b-form-checkbox value="me">{{ __('Remember me') }}</b-form-checkbox>
+          <b-form-checkbox v-model="form.remember">{{ __('Remember me') }}</b-form-checkbox>
         </b-form-group>
 
         <div class="text-center">
@@ -47,10 +47,9 @@ export default {
     return {
       LoginBanner,
       form: {
-        email: "",
-        name: "",
-        food: null,
-        checked: [],
+        username: "",
+        password: "",
+        remember: false,
       },
     };
   },

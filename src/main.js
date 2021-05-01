@@ -8,6 +8,7 @@ Vue.config.productionTip = false
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import router from './router'
+import queue from './queue'
 
 // Mock translations
 const trans = require('../resources/lang/es.json')
@@ -15,8 +16,20 @@ Vue.prototype.__ = (text, ...args) => {
   return (trans[text] || text).replace(/:(\w)/g, (ma) => args[ma[1]])
 }
 
-// Make BootstrapVue available throughout your project
+// Install plugins
 Vue.use(BootstrapVue)
+Vue.use(queue)
+
+// Mock Flows
+setTimeout(() => {
+  queue.eventBus.notify('router', {path: '/login'})
+}, 0)
+Vue.prototype.$complete = (data) => {
+  console.log(data)
+  setTimeout(() => {
+    queue.eventBus.notify('router', {path: '/about'})
+  }, 200)
+}
 
 new Vue({
   router,
