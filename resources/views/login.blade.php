@@ -12,6 +12,7 @@
     @foreach (config('plugins.css', []) as $css)
     <link href="{{ $css }}?{{filemtime(public_path($css))}}" rel="stylesheet">
     @endforeach
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
 <body>

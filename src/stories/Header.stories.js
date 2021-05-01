@@ -1,12 +1,5 @@
-import Vue from 'vue'
+import '../bootstrap'
 import AppHeader from '../components/AppHeader';
-import { BootstrapVue } from 'bootstrap-vue'
-
-// Import Bootstrap an BootstrapVue CSS files (order is important)
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
-
-Vue.use(BootstrapVue)
 
 export default {
   title: 'Example/Header',
@@ -51,6 +44,3 @@ LoggedIn.args = {
     },
   ],
 };
-
-export const LoggedOut = Template.bind({});
-LoggedOut.args = {};
