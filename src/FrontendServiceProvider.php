@@ -3,6 +3,7 @@
 namespace Coredump\Frontend;
 
 use Coredump\Frontend\Console\Commands\JddAutoloaddump;
+use Coredump\Frontend\Console\Commands\JddOnChange;
 use Coredump\Frontend\Console\Commands\JddPackageUpdate;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
@@ -50,6 +51,7 @@ class FrontendServiceProvider extends ServiceProvider
             $this->commands([
                 JddPackageUpdate::class,
                 JddAutoloaddump::class,
+                JddOnChange::class,
             ]);
         }
     }
