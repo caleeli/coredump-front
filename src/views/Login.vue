@@ -7,7 +7,7 @@
       img-alt="Card image"
       img-top
     >
-      <b-form @submit.prevent="$complete($sessionToken, form)">
+      <b-form @submit.prevent="$callProcess('UserSession', form)">
         <b-form-group :label="__('User')">
           <b-form-input
             v-model="form.username"

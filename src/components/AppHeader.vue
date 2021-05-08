@@ -42,7 +42,7 @@
               <span class="material-icons">edit</span> {{__('Edit account')}}
             </div>
           </b-dropdown-item>
-          <b-dropdown-item @click="$sendMessage($sessionToken, 'CloseSession')">
+          <b-dropdown-item @click="$complete($sessionToken, {})">
             <div class="d-flex align-items-center">
               <span class="material-icons">logout</span> {{__('Logout')}}
             </div>

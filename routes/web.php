@@ -3,4 +3,6 @@
 use Coredump\Frontend\Http\Controllers\FrontendController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('login', [FrontendController::class, 'login']);
+//Route::group(['middleware' => ['auth']], function () {
+    Route::get('/home', [FrontendController::class, 'login'])->middleware(['auth'])->name('home');;
+//});

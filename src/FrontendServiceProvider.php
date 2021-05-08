@@ -2,7 +2,9 @@
 
 namespace Coredump\Frontend;
 
+use Coredump\Frontend\Console\Commands\JddAutoloaddump;
 use Coredump\Frontend\Console\Commands\JddPackageUpdate;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class FrontendServiceProvider extends ServiceProvider
@@ -20,7 +22,8 @@ class FrontendServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'frontend');
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'frontend');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+        Route::middleware('web')
+            ->group(__DIR__.'/../routes/web.php');
         $this->loadAssets();
 
         if ($this->app->runningInConsole()) {
@@ -46,6 +49,7 @@ class FrontendServiceProvider extends ServiceProvider
             // Registering package commands.
             $this->commands([
                 JddPackageUpdate::class,
+                JddAutoloaddump::class,
             ]);
         }
     }
