@@ -48,21 +48,29 @@ export default {
     };
   },
   methods: {
+    updateInstance({payload}) {
+      console.log(payload);
+    },
+    setInstance(instance) {
+      this.$removeOwnerListeners(this);
+      this.instance = instance;
+      this.$listenInstanceUpdate(instance, this, 'updateInstance');
+    },
     callProcess() {
       this.$callProcess(this.bpmn, this.processId).then((instance) => {
-        console.log(instance);
+        this.loadInstance(instance.id);
       });
+    },
+    loadInstance(instanceId) {
+      this.$instance(instanceId, { include: "active_tokens" })
+        .then((instance) => {
+          this.setInstance(instance);
+        });
     },
   },
   mounted() {
     if (this.instanceId) {
-      this.$instance(this.instanceId, { include: "active_tokens" })
-        .catch(() => {
-          return this.$callProcess(this.bpmn, this.processId);
-        })
-        .then((instance) => {
-          this.instance = instance;
-        });
+      this.loadInstance(this.instanceId);
     } else if (this.openLatest) {
       this.$findInstances({
         include: "active_tokens,active_tokens",
@@ -73,7 +81,9 @@ export default {
         per_page: 1,
         sort: "-id",
       }).then((instances) => {
-        this.instance = instances.data[0];
+        if (instances.data.length > 0) {
+          this.setInstance(instances.data[0]);
+        }
       });
     }
     if (this.bpmn && this.processId) {
@@ -81,6 +91,9 @@ export default {
         this.process = process;
       });
     }
+  },
+  destroyed() {
+    this.$removeListeners(this);
   },
 };
 </script>

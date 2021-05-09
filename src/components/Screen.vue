@@ -6,7 +6,6 @@
 
 <script>
 const compiler = require('vue-template-compiler');
-//const { renderToString } = require('vue-server-renderer').createRenderer();
 
 export default {
   props: {
@@ -20,10 +19,10 @@ export default {
   },
   mounted() {
     this.$tokens()
-      .call(this.token.id, "getDocumentation", {})
-      .then((doc) => {
-        if (doc['text/plain']) {
-          const parsed = compiler.parseComponent(doc['text/plain'][0]);
+      .call(this.token.id, "getScreen", {})
+      .then((screen) => {
+        if (screen) {
+          const parsed = compiler.parseComponent(screen);
           let component;
           eval("component=" + parsed.script.content.trim().substr(14));
           const res = compiler.compileToFunctions(parsed.template.content);
