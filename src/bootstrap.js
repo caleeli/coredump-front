@@ -15,6 +15,11 @@ Vue.use(queue)
 Vue.use(components)
 Vue.component('grid-table', HotTable);
 
+// Boot axios
+window.axios = require('axios');
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.axios.defaults.baseURL = '/api/data/';
+
 // Get meta content by name
 function meta(name) {
   let tag = document.head.querySelector('meta[name="' + name + '"]');
@@ -35,6 +40,3 @@ if (broadcasterHost) {
 
 // Publish global components
 window.router = router
-window.axios = require('axios');
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-window.axios.defaults.baseURL = '/api/data/';

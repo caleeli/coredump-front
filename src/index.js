@@ -74,7 +74,11 @@ window.addEventListener('load', () => {
       addListener(channel, event, owner, method) {
         const eventChannel = this.bpmnEvents.find(sl => sl.channel == channel && sl.event == event);
         if (!eventChannel) {
-          this.addSocketListener(channel, event, (payload) => this.bpmnEventCatch(channel, event, payload));
+          console.log("add socket listener", { channel, event });
+          this.addSocketListener(channel, event, (payload) => {
+            console.log('EVENT CATCH:',channel, event, payload);
+            this.bpmnEventCatch(channel, event, payload)
+          });
           this.bpmnEvents.push({ channel, event });
         }
         this.bpmnListeners.push({ channel, event, owner, method });

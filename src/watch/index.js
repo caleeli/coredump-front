@@ -1,14 +1,15 @@
 const { exec } = require("child_process");
 const chokidar = require("chokidar");
-let changed = false;
+let runAt = 0;
 
 console.log(`Listening [${process.argv[2]}]... `);
 chokidar.watch("./vendor").on("change", () => {
-  changed = true;
+  runAt = new Date();
+  runAt.setSeconds(runAt.getSeconds() + 3);
 });
 
 setInterval(() => {
-  if (changed) {
+  if (runAt && (runAt <= (new Date))) {
     const cmd = process.argv.slice(3).join(" ");
     console.log(cmd);
     exec(cmd, (error, stdout, stderr) => {
@@ -18,6 +19,6 @@ setInterval(() => {
         console.log(stdout);
       }
     });
-    changed = false;
+    runAt = 0;
   }
 }, 1000);

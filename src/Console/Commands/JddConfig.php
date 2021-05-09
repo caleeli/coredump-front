@@ -48,6 +48,7 @@ class JddConfig extends Command
         $this->setEnv('BROADCASTER_HOST', "{$protocol}://{$broadcasterHost}:{$broadcasterPort}");
         $this->setEnv('BROADCASTER_ID', $broadcasterId);
         $this->setEnv('BROADCASTER_KEY', $broadcasterKey);
+        $this->setEnv('REDIS_PREFIX', '');
 
         // Save laravel-echo-server.json
         $config = [
@@ -103,7 +104,15 @@ class JddConfig extends Command
     private function setEnv($name, $value)
     {
         $config = file_exists('.env') ? file_get_contents('.env') : file_get_contents('.env.example');
-        $newConfig = preg_replace('/^\s*' . preg_quote($name) . '\s*=.*$/m', "$name=$value", $config);
+        $regexp = '/^\s*' . preg_quote($name) . '\s*=.*$/m';
+        if (preg_match($regexp, $config)) {
+            $newConfig = preg_replace($regexp, "$name=$value", $config);
+        } else {
+            if (substr($config, -1, 1) !== "\n") {
+                $config .= "\n";
+            }
+            $newConfig = $config . "$name=$value\n";
+        }
         file_put_contents('.env', $newConfig);
     }
 
@@ -111,7 +120,7 @@ class JddConfig extends Command
     {
         $db = $this->choice('What database you will use?', ['sqlite', 'mysql', 'pgsql'], env('DB_CONNECTION'));
         switch ($db) {
-            case 'SQLite':
+            case 'sqlite':
                 $this->setEnv('DB_CONNECTION', 'sqlite');
                 $this->setEnv('DB_HOST', '');
                 $this->setEnv('DB_PORT', '');
@@ -119,21 +128,21 @@ class JddConfig extends Command
                 $this->setEnv('DB_USERNAME', '');
                 $this->setEnv('DB_PASSWORD', '');
                 break;
-            case 'MySql':
+            case 'mysql':
                 $this->setEnv('DB_CONNECTION', 'mysql');
-                $this->setEnv('DB_HOST', $this->askHost('DB Host'));
-                $this->setEnv('DB_PORT', $this->askPort('DB Port', '3306'));
-                $this->setEnv('DB_DATABASE', $this->ask('Database Name', env('DB_DATABASE', '')));
-                $this->setEnv('DB_USERNAME', $this->askUser('DB User', 'root'));
-                $this->setEnv('DB_PASSWORD', $this->secret('DB Password'));
+                $this->setEnv('DB_HOST', $this->askHost('DB Host', env('DB_HOST', '127.0.0.1')));
+                $this->setEnv('DB_PORT', $this->askPort('DB Port', env('DB_PORT', '3306')));
+                $this->setEnv('DB_DATABASE', $this->ask('Database Name', env('DB_DATABASE', 'laravel')));
+                $this->setEnv('DB_USERNAME', $this->askUser('DB User', env('DB_USERNAME', 'root')));
+                $this->setEnv('DB_PASSWORD', $this->secret('DB Password', env('DB_PASSWORD', '')));
                 break;
-            case 'PostgreSql':
+            case 'pgsql':
                 $this->setEnv('DB_CONNECTION', 'pgsql');
-                $this->setEnv('DB_HOST', $this->askHost('DB Host'));
-                $this->setEnv('DB_PORT', $this->askPort('DB Port', '5432'));
-                $this->setEnv('DB_DATABASE', $this->ask('Database Name'));
-                $this->setEnv('DB_USERNAME', $this->askUser('DB User', 'postgre'));
-                $this->setEnv('DB_PASSWORD', '');
+                $this->setEnv('DB_HOST', $this->askHost('DB Host', env('DB_HOST', '127.0.0.1')));
+                $this->setEnv('DB_PORT', $this->askPort('DB Port', env('DB_PORT', '5432')));
+                $this->setEnv('DB_DATABASE', $this->ask('Database Name', env('DB_DATABASE', 'laravel')));
+                $this->setEnv('DB_USERNAME', $this->askUser('DB User', env('DB_USERNAME', 'postgre')));
+                $this->setEnv('DB_PASSWORD', $this->secret('DB Password', env('DB_PASSWORD', '')));
                 break;
         }
     }
