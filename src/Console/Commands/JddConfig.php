@@ -2,10 +2,9 @@
 
 namespace Coredump\Frontend\Console\Commands;
 
+use function GuzzleHttp\json_encode;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
-
-use function GuzzleHttp\json_encode;
 
 class JddConfig extends Command
 {
@@ -45,7 +44,7 @@ class JddConfig extends Command
         // Save .env
         $this->setEnv('APP_URL', $appUrl);
         $this->setEnv('APP_DEBUG', $appDebug);
-        $this->setEnv('DB_DATABASE', base_path('database/database.sqlite'));
+        $this->configDatabase();
         $this->setEnv('BROADCASTER_HOST', "{$protocol}://{$broadcasterHost}:{$broadcasterPort}");
         $this->setEnv('BROADCASTER_ID', $broadcasterId);
         $this->setEnv('BROADCASTER_KEY', $broadcasterKey);
@@ -106,5 +105,64 @@ class JddConfig extends Command
         $config = file_exists('.env') ? file_get_contents('.env') : file_get_contents('.env.example');
         $newConfig = preg_replace('/^\s*' . preg_quote($name) . '\s*=.*$/m', "$name=$value", $config);
         file_put_contents('.env', $newConfig);
+    }
+
+    private function configDatabase()
+    {
+        $db = $this->choice('What database you will use?', ['sqlite', 'mysql', 'pgsql'], env('DB_CONNECTION'));
+        switch ($db) {
+            case 'SQLite':
+                $this->setEnv('DB_CONNECTION', 'sqlite');
+                $this->setEnv('DB_HOST', '');
+                $this->setEnv('DB_PORT', '');
+                $this->setEnv('DB_DATABASE', base_path('database/database.sqlite'));
+                $this->setEnv('DB_USERNAME', '');
+                $this->setEnv('DB_PASSWORD', '');
+                break;
+            case 'MySql':
+                $this->setEnv('DB_CONNECTION', 'mysql');
+                $this->setEnv('DB_HOST', $this->askHost('DB Host'));
+                $this->setEnv('DB_PORT', $this->askPort('DB Port', '3306'));
+                $this->setEnv('DB_DATABASE', $this->ask('Database Name', env('DB_DATABASE', '')));
+                $this->setEnv('DB_USERNAME', $this->askUser('DB User', 'root'));
+                $this->setEnv('DB_PASSWORD', $this->secret('DB Password'));
+                break;
+            case 'PostgreSql':
+                $this->setEnv('DB_CONNECTION', 'pgsql');
+                $this->setEnv('DB_HOST', $this->askHost('DB Host'));
+                $this->setEnv('DB_PORT', $this->askPort('DB Port', '5432'));
+                $this->setEnv('DB_DATABASE', $this->ask('Database Name'));
+                $this->setEnv('DB_USERNAME', $this->askUser('DB User', 'postgre'));
+                $this->setEnv('DB_PASSWORD', '');
+                break;
+        }
+    }
+
+    private function askHost($question, $default = 'localhost')
+    {
+        return $this->askWithCompletion($question, [
+            'localhost',
+            '127.0.0.1',
+        ], $default);
+    }
+
+    private function askPort($question, $default = '')
+    {
+        return $this->askWithCompletion($question, [
+            '3306',
+            '5432',
+            '8080',
+        ], $default);
+    }
+
+    private function askUser($question, $default = 'root')
+    {
+        return $this->askWithCompletion($question, [
+            'homestead',
+            'laravel',
+            'postgre',
+            'root',
+            'su',
+        ], $default);
     }
 }
