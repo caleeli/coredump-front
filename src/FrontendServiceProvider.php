@@ -3,6 +3,7 @@
 namespace Coredump\Frontend;
 
 use Coredump\Frontend\Console\Commands\JddAutoloaddump;
+use Coredump\Frontend\Console\Commands\JddConfig;
 use Coredump\Frontend\Console\Commands\JddOnChange;
 use Coredump\Frontend\Console\Commands\JddPackageUpdate;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,8 @@ class FrontendServiceProvider extends ServiceProvider
         Route::middleware('web')
             ->group(__DIR__.'/../routes/web.php');
         $this->loadAssets();
+        // Register bpmn files
+        app('config')->push('workflow.processes', __DIR__ . '/../bpmn/*.bpmn');
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
@@ -52,6 +55,7 @@ class FrontendServiceProvider extends ServiceProvider
                 JddPackageUpdate::class,
                 JddAutoloaddump::class,
                 JddOnChange::class,
+                JddConfig::class,
             ]);
         }
     }

@@ -29,23 +29,28 @@ Vue.prototype.$complete = (token) => {
 Vue.prototype.$sendMessage = () => {
 }
 
-Vue.prototype.$complete = (token) => {
-  if (token.instanceId === 1) {
-    setTimeout(() => {
-      queue.eventBus.notify('router', { path: '/about' })
-    }, 200)
-  }
+Vue.prototype.$completeTask = (token, data = {}) => {
+  return app.bpmn.complete(data, token.id);
 }
-Vue.prototype.$callProcess = (processId, data) => {
-  //this.bpmn = new window.Bpmn({
-  //  $owner: this,
-  //});
-  console.log(app, processId, data)
+Vue.prototype.$callProcess = (bpmn, processId, data = {}) => {
+  return app.bpmn.$instance.call(null, 'callProcess', {bpmn, processId, data})
+}
+Vue.prototype.$instance = (instanceId, params) => {
+  return app.bpmn.$instance.load(instanceId, params);
+}
+Vue.prototype.$findInstances = (params) => {
+  return app.bpmn.$instance.index(params);
+}
+Vue.prototype.$process = (bpmn, processId) => {
+  return app.bpmn.$instance.call(null, 'getProcess', {bpmn, processId});
+}
+Vue.prototype.$tokens = () => {
+  return app.bpmn.$tokens;
 }
 
 window.addEventListener('load', () => {
   app = new Vue({
-    mixins: [window.workflowMixin],
+    mixins: [window.WorkflowMixin, window.ResourceMixin],
     router,
     render: h => h(App)
   }).$mount('#app')
