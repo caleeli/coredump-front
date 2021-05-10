@@ -43,6 +43,9 @@ export default {
   },
   methods: {
     keyup(event) {
+      if (!this.$el.contains(event.originalTarget)) {
+        return;
+      }
       const keyName = event.key;
       let move = false;
       switch (keyName) {

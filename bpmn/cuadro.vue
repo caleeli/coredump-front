@@ -1,6 +1,7 @@
 <template>
   <div>
     <app-grid v-model="cuadro" :rows="4" :cols="5" />
+    <input >
   </div>
 </template>
 
