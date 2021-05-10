@@ -29,11 +29,9 @@ export default {
         .then((screen) => {
           if (screen) {
             const parsed = compiler.parseComponent(screen);
-            console.log(parsed);
             let component;
             eval("component=" + parsed.script.content.trim().substr(14));
             component.template = parsed.template.content;
-            console.log(component);
             this.content = component;
           }
         })
