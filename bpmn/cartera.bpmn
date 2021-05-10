@@ -8,13 +8,14 @@
     </extensionElements>
     <userTask completionQuantity="1" id="_3" implementation="./parametros.vue" isForCompensation="false" name="Parametros" startQuantity="1">
       <documentation id="_3_D_1" textFormat="text/url">
-        <![CDATA[./parametros.vue]]>
+        <![CDATA[
+        ]]>
       </documentation>
       <incoming>_4</incoming>
       <outgoing>_6</outgoing>
     </userTask>
     <sequenceFlow id="_4" sourceRef="_2" targetRef="_3"/>
-    <userTask completionQuantity="1" id="_5" implementation="./parametros.vue" isForCompensation="false" name="Cuadro" startQuantity="1">
+    <userTask completionQuantity="1" id="_5" implementation="./cuadro.vue" isForCompensation="false" name="Cuadro" startQuantity="1">
       <documentation id="_5_D_1" textFormat="text/plain">
         <![CDATA[
         ]]>
@@ -50,13 +51,13 @@
       <bpmndi:BPMNShape bpmnElement="_7" id="Yaoqiang-_7">
         <dc:Bounds height="32.0" width="32.0" x="569.0" y="147.5"/>
         <bpmndi:BPMNLabel>
-          <dc:Bounds height="18.8" width="62.0" x="554.0" y="188.26"/>
+          <dc:Bounds height="18.8" width="62.0" x="554.0" y="188.34"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_2" id="Yaoqiang-_2">
         <dc:Bounds height="32.0" width="32.0" x="169.0" y="147.5"/>
         <bpmndi:BPMNLabel>
-          <dc:Bounds height="18.8" width="69.0" x="150.5" y="188.26"/>
+          <dc:Bounds height="18.8" width="69.0" x="150.5" y="188.34"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="_8" id="Yaoqiang-_8">

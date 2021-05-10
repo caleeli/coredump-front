@@ -1,11 +1,16 @@
 <template>
   <div>
-    <component :is="content" :token="token" :instance="instance" :data="instance.attributes.data" />
+    <component
+      :is="content"
+      :token="token"
+      :instance="instance"
+      :data="instance.attributes.data"
+    />
   </div>
 </template>
 
 <script>
-const compiler = require('vue-template-compiler');
+const compiler = require("vue-template-compiler");
 
 export default {
   props: {
@@ -17,19 +22,33 @@ export default {
       content: null,
     };
   },
+  methods: {
+    loadScreen() {
+      this.$tokens()
+        .call(this.token.id, "getScreen", {})
+        .then((screen) => {
+          if (screen) {
+            const parsed = compiler.parseComponent(screen);
+            console.log(parsed);
+            let component;
+            eval("component=" + parsed.script.content.trim().substr(14));
+            component.template = parsed.template.content;
+            console.log(component);
+            this.content = component;
+          }
+        })
+        .catch(() => {
+          this.content = "NoScreen";
+        });
+    },
+  },
   mounted() {
-    this.$tokens()
-      .call(this.token.id, "getScreen", {})
-      .then((screen) => {
-        if (screen) {
-          const parsed = compiler.parseComponent(screen);
-          let component;
-          eval("component=" + parsed.script.content.trim().substr(14));
-          const res = compiler.compileToFunctions(parsed.template.content);
-          component.render = res.render;
-          this.content = component;
-        }
-      });
+    this.loadScreen();
+  },
+  watch: {
+    token() {
+      this.loadScreen();
+    },
   },
 };
 </script>

@@ -16,6 +16,8 @@
 
 <script>
 import Screen from "./Screen.vue";
+import { debounce } from "lodash";
+
 export default {
   components: { Screen },
   props: {
@@ -50,6 +52,7 @@ export default {
   methods: {
     updateInstance({payload}) {
       console.log(payload);
+      this.loadInstance(this.instance.id);
     },
     setInstance(instance) {
       this.$removeOwnerListeners(this);
@@ -69,6 +72,9 @@ export default {
     },
   },
   mounted() {
+    // Debounce instance
+    this.loadInstance = debounce(this.loadInstance);
+    // Load instance
     if (this.instanceId) {
       this.loadInstance(this.instanceId);
     } else if (this.openLatest) {
