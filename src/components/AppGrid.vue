@@ -2,32 +2,39 @@
   <table>
     <tr>
       <th class="bg-light px-2 border"></th>
-      <th v-for="i in cols" :key="`col-${i}`" class="bg-light px-2 border">
+      <th v-for="i in cols" :key="`col-${i}`" class="bg-light px-2 border text-center">
         {{ column(i) }}
       </th>
     </tr>
     <tr v-for="n in rows" :key="`row-${n}`">
-      <th class="bg-light px-2 border">{{ n }}</th>
+      <th class="bg-light px-2 border text-center">{{ n }}</th>
       <td
         v-for="i in cols"
         :key="`cell-${n}-${i}`"
         class="bg-white cell-padding border"
-        :class="{ 'cell-cursor': n === row && i === col }"
+        :class="getCellClass(n, i)"
         @click="selectCell(n, i)"
         @blur="updateData()"
         :contenteditable="n === row && i === col"
-      >{{ value[n-1] && value[n-1][i-1] || "" }}</td>
+      >
+        {{ (value[n - 1] && value[n - 1][i - 1]) || "" }}
+      </td>
     </tr>
   </table>
 </template>
 
 <script>
-import {isEqual} from "lodash";
+import { isEqual } from "lodash";
 export default {
   props: {
     cols: { default: 3 },
     rows: { default: 3 },
     rich: { default: false },
+    cellClass: {
+      default() {
+        return {};
+      },
+    },
     value: {
       default() {
         return [];
@@ -42,6 +49,17 @@ export default {
     };
   },
   methods: {
+    getCellClass(row, col) {
+      const css = [];
+      if (row === this.row && col === this.col) css.push("cell-cursor");
+      const alphaCol = this.column(col);
+      const alphaRow = `${row}`;
+      const alphaCell = `${alphaCol}${alphaRow}`;
+      if (this.cellClass[alphaCol]) css.push(this.cellClass[alphaCol]);
+      if (this.cellClass[alphaRow]) css.push(this.cellClass[alphaRow]);
+      if (this.cellClass[alphaCell]) css.push(this.cellClass[alphaCell]);
+      return css.join(" ");
+    },
     keyup(event) {
       if (!this.$el.contains(event.originalTarget)) {
         return;
@@ -104,7 +122,7 @@ export default {
         data.push(row);
       }
       if (!isEqual(data, this.value)) {
-        this.$emit('input', data);
+        this.$emit("input", data);
       }
     },
     selectCell(row, col) {
