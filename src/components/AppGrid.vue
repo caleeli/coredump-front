@@ -14,10 +14,9 @@
         class="bg-white cell-padding border"
         :class="{ 'cell-cursor': n === row && i === col }"
         @click="selectCell(n, i)"
+        @blur="updateData()"
         :contenteditable="n === row && i === col"
-      >
-        1
-      </td>
+      >{{ value[n-1] && value[n-1][i-1] || "" }}</td>
     </tr>
   </table>
 </template>
@@ -87,6 +86,9 @@ export default {
       if (move) {
         this.selectCell(this.row, this.col);
       }
+      this.updateData();
+    },
+    updateData() {
       const data = [];
       for (let r = 1; r <= this.rows; r++) {
         const row = [];
