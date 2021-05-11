@@ -36,6 +36,7 @@ Vue.prototype.$callProcess = (bpmn, processId, data = {}) => {
   return app.bpmn.$instance.call(null, 'callProcess', { bpmn, processId, data })
 }
 Vue.prototype.$instance = (instanceId, params) => {
+  params.t = new Date().getTime();
   return app.bpmn.$instance.load(instanceId, params);
 }
 Vue.prototype.$findInstances = (params) => {
@@ -53,7 +54,6 @@ Vue.prototype.$listenInstanceUpdate = (instance, owner, method) => {
 Vue.prototype.$removeOwnerListeners = (owner) => {
   app.removeOwnerListeners(owner);
 }
-
 
 window.addEventListener('load', () => {
   app = new Vue({

@@ -1,22 +1,10 @@
 <template>
-  <b-card>
-    <b-card-body>
-      <h3>
-        <b-link @click="callProcess">
-          <span class="material-icons">play_circle</span>
-          {{ process.name }}
-        </b-link>
-      </h3>
-    </b-card-body>
-    <b-card-body v-if="token">
-      <screen :token="token" :instance="instance"></screen>
-    </b-card-body>
-  </b-card>
+  <screen v-if="token" :token="token" :instance="instance"></screen>
 </template>
 
 <script>
 import Screen from "./Screen.vue";
-import { debounce } from "lodash";
+//import { debounce } from "lodash";
 
 export default {
   components: { Screen },
@@ -25,6 +13,7 @@ export default {
     instanceId: Number,
     processId: String,
     openLatest: Boolean,
+    full: Boolean,
   },
   computed: {
     token() {
@@ -50,30 +39,34 @@ export default {
     };
   },
   methods: {
-    updateInstance({payload}) {
-      console.log(payload);
+    updateInstance() {
       this.loadInstance(this.instance.id);
     },
     setInstance(instance) {
       this.$removeOwnerListeners(this);
       this.instance = instance;
-      this.$listenInstanceUpdate(instance, this, 'updateInstance');
+      this.$listenInstanceUpdate(instance, this, "updateInstance");
     },
     callProcess() {
+      this.$router.push({
+        name: "open",
+        params: { bpmn: this.bpmn, processId: this.processId },
+      });
       this.$callProcess(this.bpmn, this.processId).then((instance) => {
         this.loadInstance(instance.id);
       });
     },
     loadInstance(instanceId) {
-      this.$instance(instanceId, { include: "active_tokens" })
-        .then((instance) => {
+      this.$instance(instanceId, { include: "active_tokens" }).then(
+        (instance) => {
           this.setInstance(instance);
-        });
+        }
+      );
     },
   },
   mounted() {
     // Debounce instance
-    this.loadInstance = debounce(this.loadInstance);
+    // this.loadInstance = debounce(this.loadInstance);
     // Load instance
     if (this.instanceId) {
       this.loadInstance(this.instanceId);
@@ -99,7 +92,7 @@ export default {
     }
   },
   destroyed() {
-    this.$removeListeners(this);
+    this.$removeOwnerListeners(this);
   },
 };
 </script>

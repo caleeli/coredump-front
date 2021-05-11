@@ -6,15 +6,12 @@ import components from './components'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import Echo from 'laravel-echo';
-import { HotTable } from '@handsontable/vue';
-import 'handsontable/dist/handsontable.full.css';
 
 // Boot Vue
 Vue.config.productionTip = false
 Vue.use(BootstrapVue)
 Vue.use(queue)
 Vue.use(components)
-Vue.component('grid-table', HotTable);
 
 // Boot axios
 window.axios = require('axios');

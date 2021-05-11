@@ -1,6 +1,6 @@
 <template>
   <b-navbar toggleable="md" type="dark" variant="info">
-    <b-navbar-brand>Cartera</b-navbar-brand>
+    <b-navbar-brand>{{ title }}</b-navbar-brand>
 
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
     <b-collapse id="nav-collapse" is-nav>
@@ -57,6 +57,11 @@
 export default {
   props: {
     menu: Array,
+  },
+  computed: {
+    title() {
+      return window.document.title;
+    },
   }
 };
 </script>

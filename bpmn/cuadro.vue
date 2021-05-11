@@ -1,13 +1,14 @@
 <template>
   <div>
     <app-grid v-model="cuadro" :rows="13" :cols="3" :cell-class="cellClass" />
-    <input />
+    <b-button @click="$completeTask(token, {})">Completar</b-button>
   </div>
 </template>
 
 <script>
 export default {
   props: {
+    token: Object,
     prestamo: { default: 100 },
     modalidad_cuotas: { default: "" },
   },
