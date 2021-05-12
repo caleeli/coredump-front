@@ -7,11 +7,12 @@ export default {
 
 const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
-  template: '<icon-selector v-model="value" />',
+  template: '<icon-selector v-model="value" :placeholder="placeholder" />',
 });
 
 export const Simple = Template.bind({});
 Simple.args = {
+  placeholder: "icon placeholder"
 };
 
 
