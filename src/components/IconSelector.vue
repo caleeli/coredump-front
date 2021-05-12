@@ -5,7 +5,7 @@
         <span class="material-icons">{{ value }}</span>
       </b-input-group-text>
     </template>
-    <b-form-input list="icons-datalist" v-model="value" @input="input" v-bind="$attrs" v-on="$listeners" />
+    <b-form-input list="icons-datalist" v-model="local" @input="input" v-bind="$attrs" v-on="$listeners" />
     <datalist id="icons-datalist">
       <option v-for="icon in icons" :key="`icon-${icon}`">{{ icon }}</option>
     </datalist>
