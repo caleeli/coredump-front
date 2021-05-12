@@ -1,17 +1,15 @@
 <template>
-  <div>
-    <b-input-group>
-      <template #prepend>
-        <b-input-group-text style="width: 3em; overflow: hidden">
-          <span class="material-icons">{{ value }}</span>
-        </b-input-group-text>
-      </template>
-      <b-form-input list="icons-datalist" v-model="value" @change="change" />
-    </b-input-group>
+  <b-input-group>
+    <template #prepend>
+      <b-input-group-text style="width: 3em; overflow: hidden">
+        <span class="material-icons">{{ value }}</span>
+      </b-input-group-text>
+    </template>
+    <b-form-input list="icons-datalist" v-model="value" @change="change" />
     <datalist id="icons-datalist">
       <option v-for="icon in icons" :key="`icon-${icon}`">{{ icon }}</option>
     </datalist>
-  </div>
+  </b-input-group>
 </template>
 
 <script>
