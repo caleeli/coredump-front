@@ -1,35 +1,28 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:tns="http://sourceforge.net/bpmn/definitions/_1620478010940" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:yaoqiang="http://bpmn.sourceforge.net" exporter="Yaoqiang BPMN Editor" exporterVersion="5.3" expressionLanguage="http://www.w3.org/1999/XPath" id="_1620478010940" name="" targetNamespace="http://sourceforge.net/bpmn/definitions/_1620478010940" typeLanguage="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://bpmn.sourceforge.net/schemas/BPMN20.xsd">
   <process id="PROCESS_1" isClosed="false" isExecutable="true" name="Proyección Cartera" processType="None">
+    <documentation id="PROCESS_1_D_1" textFormat="text/plain"><![CDATA[Análisis del spread de un préstamo bancario]]></documentation>
     <extensionElements>
       <yaoqiang:description/>
       <yaoqiang:pageFormat height="841.8897637795276" imageableHeight="831.8897637795276" imageableWidth="588.1102362204724" imageableX="5.0" imageableY="5.0" orientation="0" width="598.1102362204724"/>
       <yaoqiang:page background="#FFFFFF" horizontalCount="1" verticalCount="1"/>
     </extensionElements>
     <userTask completionQuantity="1" id="_3" implementation="./parametros.vue" isForCompensation="false" name="Parametros" startQuantity="1">
-      <documentation id="_3_D_1" textFormat="text/url">
-        <![CDATA[
-        ]]>
-      </documentation>
       <incoming>_4</incoming>
       <outgoing>_6</outgoing>
     </userTask>
     <sequenceFlow id="_4" sourceRef="_2" targetRef="_3"/>
     <userTask completionQuantity="1" id="_5" implementation="./cuadro.vue" isForCompensation="false" name="Cuadro" startQuantity="1">
-      <documentation id="_5_D_1" textFormat="text/plain">
-        <![CDATA[
-        ]]>
-      </documentation>
       <incoming>_6</incoming>
       <outgoing>_8</outgoing>
     </userTask>
     <sequenceFlow id="_6" sourceRef="_3" targetRef="_5"/>
-    <endEvent id="_7" name="End Event">
+    <endEvent id="_7" name="Completado">
       <incoming>_8</incoming>
       <inputSet/>
     </endEvent>
     <sequenceFlow id="_8" sourceRef="_5" targetRef="_7"/>
-    <startEvent id="_2" isInterrupting="true" name="Start Event" parallelMultiple="false">
+    <startEvent id="_2" isInterrupting="true" name="Iniciar" parallelMultiple="false">
       <outgoing>_4</outgoing>
       <outputSet/>
     </startEvent>
@@ -37,9 +30,9 @@
   <bpmndi:BPMNDiagram id="Yaoqiang_Diagram-PROCESS_1" name="Proyeccion Cartera" resolution="96.0">
     <bpmndi:BPMNPlane bpmnElement="PROCESS_1">
       <bpmndi:BPMNShape bpmnElement="_3" id="Yaoqiang-_3">
-        <dc:Bounds height="55.0" width="85.0" x="270.0" y="136.5"/>
+        <dc:Bounds height="55.0" width="85.0" x="270.0" y="136.0"/>
         <bpmndi:BPMNLabel>
-          <dc:Bounds height="18.8" width="73.0" x="276.0" y="156.6"/>
+          <dc:Bounds height="18.8" width="73.0" x="276.0" y="156.1"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_5" id="Yaoqiang-_5">
@@ -51,13 +44,13 @@
       <bpmndi:BPMNShape bpmnElement="_7" id="Yaoqiang-_7">
         <dc:Bounds height="32.0" width="32.0" x="569.0" y="147.5"/>
         <bpmndi:BPMNLabel>
-          <dc:Bounds height="18.8" width="62.0" x="554.0" y="188.34"/>
+          <dc:Bounds height="18.8" width="74.0" x="548.0" y="188.74"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_2" id="Yaoqiang-_2">
         <dc:Bounds height="32.0" width="32.0" x="169.0" y="147.5"/>
         <bpmndi:BPMNLabel>
-          <dc:Bounds height="18.8" width="69.0" x="150.5" y="188.34"/>
+          <dc:Bounds height="18.8" width="40.0" x="165.0" y="188.74"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="_8" id="Yaoqiang-_8">
@@ -68,17 +61,17 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_6" id="Yaoqiang-_6">
-        <di:waypoint x="355.0" y="164.0"/>
+        <di:waypoint x="355.0" y="163.5"/>
         <di:waypoint x="421.0" y="163.5"/>
         <bpmndi:BPMNLabel>
-          <dc:Bounds height="18.8" width="6.0" x="385.0" y="154.35"/>
+          <dc:Bounds height="18.8" width="6.0" x="385.0" y="154.1"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="_4" id="Yaoqiang-_4">
         <di:waypoint x="200.99218559171948" y="163.5"/>
-        <di:waypoint x="270.0" y="164.0"/>
+        <di:waypoint x="270.0" y="163.5"/>
         <bpmndi:BPMNLabel>
-          <dc:Bounds height="18.8" width="6.0" x="232.5" y="154.34"/>
+          <dc:Bounds height="18.8" width="6.0" x="232.5" y="154.1"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>

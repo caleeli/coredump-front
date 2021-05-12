@@ -4,7 +4,6 @@
 
 <script>
 import Screen from "./Screen.vue";
-//import { debounce } from "lodash";
 
 export default {
   components: { Screen },
@@ -13,7 +12,7 @@ export default {
     instanceId: Number,
     processId: String,
     openLatest: Boolean,
-    full: Boolean,
+    runInCard: Boolean,
   },
   computed: {
     token() {
@@ -42,10 +41,28 @@ export default {
     updateInstance() {
       this.loadInstance(this.instance.id);
     },
+    completedInstance() {
+      if (this.runInCard) {
+        this.loadInstance(this.instance.id);
+      } else {
+        this.$router.push({ name: "home" });
+      }
+    },
     setInstance(instance) {
       this.$removeOwnerListeners(this);
       this.instance = instance;
-      this.$listenInstanceUpdate(instance, this, "updateInstance");
+      this.$listenInstanceEvent(
+        instance,
+        ".ActivityActivated",
+        this,
+        "updateInstance"
+      );
+      this.$listenInstanceEvent(
+        instance,
+        ".ProcessInstanceCompleted",
+        this,
+        "completedInstance"
+      );
     },
     callProcess() {
       this.$router.push({
@@ -65,9 +82,6 @@ export default {
     },
   },
   mounted() {
-    // Debounce instance
-    // this.loadInstance = debounce(this.loadInstance);
-    // Load instance
     if (this.instanceId) {
       this.loadInstance(this.instanceId);
     } else if (this.openLatest) {

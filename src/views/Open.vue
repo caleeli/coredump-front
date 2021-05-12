@@ -1,5 +1,8 @@
 <template>
-  <run-process v-bind="runProps" />
+  <div>
+    <app-header />
+    <run-process v-bind="runProps" class="m-2" />
+  </div>
 </template>
 
 <script>
@@ -13,6 +16,7 @@ export default {
         processId: this.$route.params.processId,
         instanceId: parseInt(this.$route.params.instanceId),
         openLatest: this.$route.params.openLatest,
+        runInCard: false,
       },
     };
   },

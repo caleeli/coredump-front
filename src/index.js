@@ -35,6 +35,9 @@ Vue.prototype.$completeTask = (token, data = {}) => {
 Vue.prototype.$callProcess = (bpmn, processId, data = {}) => {
   return app.bpmn.$instance.call(null, 'callProcess', { bpmn, processId, data })
 }
+Vue.prototype.$instanceScreen = (instanceId) => {
+  return app.bpmn.$instance.call(instanceId, 'getScreen', {})
+}
 Vue.prototype.$instance = (instanceId, params) => {
   params.t = new Date().getTime();
   return app.bpmn.$instance.load(instanceId, params);
@@ -50,6 +53,9 @@ Vue.prototype.$tokens = () => {
 }
 Vue.prototype.$listenInstanceUpdate = (instance, owner, method) => {
   app.addListener(`Process.${instance.id}`, '.ProcessUpdated', owner, method);
+}
+Vue.prototype.$listenInstanceEvent = (instance, event, owner, method) => {
+  app.addListener(`Process.${instance.id}`, event, owner, method);
 }
 Vue.prototype.$removeOwnerListeners = (owner) => {
   app.removeOwnerListeners(owner);
@@ -75,6 +81,7 @@ window.addEventListener('load', () => {
         const eventChannel = this.bpmnEvents.find(sl => sl.channel == channel && sl.event == event);
         if (!eventChannel) {
           this.addSocketListener(channel, event, (payload) => {
+            console.log(channel, event);
             this.bpmnEventCatch(channel, event, payload)
           });
           this.bpmnEvents.push({ channel, event });
