@@ -16,7 +16,11 @@ export default {
   },
   computed: {
     token() {
-      return this.instance.relationships.active_tokens[0];
+      const token = this.instance.relationships.active_tokens[0];
+      if(token && token.attributes) {
+        this.$emit("loadToken", token);
+      }
+      return token;
     },
   },
   data() {
@@ -63,6 +67,7 @@ export default {
         this,
         "completedInstance"
       );
+      this.$emit("loadInstance", this.instance);
     },
     callProcess() {
       this.$router.push({

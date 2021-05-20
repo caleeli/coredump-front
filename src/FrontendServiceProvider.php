@@ -6,6 +6,7 @@ use Coredump\Frontend\Console\Commands\JddAutoloaddump;
 use Coredump\Frontend\Console\Commands\JddConfig;
 use Coredump\Frontend\Console\Commands\JddOnChange;
 use Coredump\Frontend\Console\Commands\JddPackageUpdate;
+use Coredump\Frontend\Managers\ModuleManager;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
@@ -22,13 +23,26 @@ class FrontendServiceProvider extends ServiceProvider
          * Optional methods to load your package assets
          */
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'frontend');
+        $this->loadJsonTranslationsFrom(__DIR__.'/../resources/lang');
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'frontend');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         Route::middleware('web')
             ->group(__DIR__.'/../routes/web.php');
         $this->loadAssets();
+        // Register models
+        app('config')->push('jsonapi.models', 'Coredump\Frontend\Models');
+
         // Register bpmn files
-        app('config')->push('workflow.processes', __DIR__ . '/../bpmn/*.bpmn');
+        app('config')->push('workflow.processes', __DIR__ . '/../bpmn/core/*/*.bpmn');
+
+        // Register global screens
+        app('config')->push('screens', __DIR__ . '/../bpmn/core/*.global.vue');
+
+        // Register Module Manager
+        ModuleManager::$path = __DIR__ . '/../bpmn/templates';
+        app('config')->push('workflow.processes', __DIR__ . '/../bpmn/deployed/*/*.bpmn');
+        ModuleManager::$deployedPath = __DIR__ . '/../bpmn/deployed';
+        app('config')->push('screens', __DIR__ . '/../bpmn/deployed/*/*.global.vue');
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
@@ -44,7 +58,10 @@ class FrontendServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__.'/../dist' => public_path('modules/' . static::PluginName),
             ], static::PluginName . '/assets');
-
+            $this->publishes([
+                __DIR__.'/../node_modules/@processmaker/modeler/dist/img' => public_path('modules/coredump/frontend/js/img'),
+            ], static::PluginName . '/assets');
+    
             // Publishing the translation files.
             /*$this->publishes([
                 __DIR__.'/../resources/lang' => resource_path('lang/vendor/frontend'),
@@ -67,6 +84,10 @@ class FrontendServiceProvider extends ServiceProvider
     {
         // Automatically apply the package configuration
         $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'frontend');
+        app()->config["filesystems.disks.modules_deployed"] = [
+            'driver' => 'local',
+            'root' => __DIR__ . '/../bpmn/deployed',
+        ];
 
         // Register the main class to use with the facade
         $this->app->singleton('frontend', function () {

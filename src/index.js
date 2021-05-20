@@ -4,12 +4,6 @@ import App from './App.vue'
 import router from './router'
 import queue from './queue'
 
-// Mock translations
-const trans = require('../resources/lang/es.json')
-Vue.prototype.__ = (text, ...args) => {
-  return (trans[text] || text).replace(/:(\w)/g, (ma) => args[ma[1]])
-}
-
 // Mock Flows
 let app
 setTimeout(() => {
@@ -34,6 +28,9 @@ Vue.prototype.$completeTask = (token, data = {}) => {
 }
 Vue.prototype.$callProcess = (bpmn, processId, data = {}) => {
   return app.bpmn.$instance.call(null, 'callProcess', { bpmn, processId, data })
+}
+Vue.prototype.$cancelInstance = (instance) => {
+  return app.bpmn.$instance.call(instance.id, 'cancel', {})
 }
 Vue.prototype.$instanceScreen = (instanceId) => {
   return app.bpmn.$instance.call(instanceId, 'getScreen', {})
@@ -60,14 +57,22 @@ Vue.prototype.$listenInstanceEvent = (instance, event, owner, method) => {
 Vue.prototype.$removeOwnerListeners = (owner) => {
   app.removeOwnerListeners(owner);
 }
+Vue.prototype.$sendMessage = (instance, targetId, messageId, data = {}) => {
+  return app.bpmn.$instance.call(instance.id, 'sendMessage', { targetId, messageId, data });
+}
+Vue.prototype.$cancelInstance = (instance) => {
+  return app.bpmn.$instance.call(instance.id, 'cancel', {});
+}
 
 window.addEventListener('load', () => {
+  Vue.mixin(window.ResourceMixin);
   app = new Vue({
     mixins: [window.WorkflowMixin, window.ResourceMixin],
     router,
     render: h => h(App),
     data() {
       return {
+        user: this.$api.user.row(window.userId),
         bpmnListeners: [],
         bpmnEvents: [],
       };
@@ -75,13 +80,12 @@ window.addEventListener('load', () => {
     methods: {
       bpmnEventCatch(channel, event, payload) {
         this.bpmnListeners.filter(bl => bl.channel === channel && bl.event === event)
-          .forEach(bl => (bl.method instanceof Function ? bl.method : bl.owner[bl.method])({channel, event, payload}));
+          .forEach(bl => (bl.method instanceof Function ? bl.method : bl.owner[bl.method])({ channel, event, payload }));
       },
       addListener(channel, event, owner, method) {
         const eventChannel = this.bpmnEvents.find(sl => sl.channel == channel && sl.event == event);
         if (!eventChannel) {
           this.addSocketListener(channel, event, (payload) => {
-            console.log(channel, event);
             this.bpmnEventCatch(channel, event, payload)
           });
           this.bpmnEvents.push({ channel, event });

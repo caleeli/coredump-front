@@ -3,6 +3,7 @@
 namespace Coredump\Frontend\Console\Commands;
 
 use Coredump\Frontend\FrontendServiceProvider;
+use Coredump\Frontend\Models\Dashboard;
 use Illuminate\Console\Command;
 
 class JddPackageUpdate extends Command
@@ -30,5 +31,22 @@ class JddPackageUpdate extends Command
     public function handle()
     {
         $this->call('vendor:publish', ['--tag' => FrontendServiceProvider::PluginName . '/assets', '--force' => true]);
+        $this->installDashboard();
+    }
+
+    private function installDashboard()
+    {
+        Dashboard::firstOrCreate([
+            'key' => 'modules',
+        ], [
+            'name' => 'Crear Modulo',
+            'key' => 'modules',
+            'description' => 'Crea un nuevo modulo',
+            'icon' => 'developer_board',
+            'bpmn' => 'modules.bpmn',
+            'process_id' => 'PROCESS_1',
+            'screen' => './modules.vue',
+            'role' => 'admin',
+        ]);
     }
 }

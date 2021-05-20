@@ -7,19 +7,28 @@
     "build": "vue-cli-service build",
     "watch": "vue-cli-service build --watch src/index.js",
     "lint": "vue-cli-service lint",
-    "storybook": "start-storybook -p 6006",
+    "storybook": "start-storybook -p 6006 -s ./node_modules/@processmaker/modeler/dist",
     "build-storybook": "build-storybook"
   },
   "dependencies": {
+    "@processmaker/modeler": "^1.11.0",
+    "@processmaker/screen-builder": "^2.8.1",
     "axios": "^0.21.1",
     "bootstrap": "^4.6.0",
     "bootstrap-vue": "^2.21.2",
     "chokidar": "^3.5.1",
     "core-js": "^3.6.5",
+    "dayjs": "^1.10.4",
+    "file-saver": "^2.0.5",
+    "jszip": "^3.6.0",
     "laravel-echo": "^1.10.0",
+    "monaco-editor-webpack-plugin": "1.9.*",
     "socket.io-client": "^2.3.0",
+    "style-it": "^2.1.4",
     "vue": "^2.6.11",
-    "vue-router": "^3.5.1"
+    "vue-monaco": "^1.2.2",
+    "vue-router": "^3.5.1",
+    "vuex": "^3.6.2"
   },
   "devDependencies": {
     "@babel/core": "^7.14.0",

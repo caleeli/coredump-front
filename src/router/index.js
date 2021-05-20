@@ -25,6 +25,11 @@ const routes = [
     name: 'open',
     component: () => import(/* webpackChunkName: "about" */ '../views/Open.vue')
   },
+  {
+    path: '/list/:bpmn',
+    name: 'process.list',
+    component: () => import(/* webpackChunkName: "about" */ '../views/List.vue')
+  },
 ]
 
 const router = new VueRouter({

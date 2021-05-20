@@ -3,7 +3,7 @@
     <tr>
       <th class="bg-light px-2 border"></th>
       <th v-for="i in cols" :key="`col-${i}`" class="bg-light px-2 border text-center">
-        {{ column(i) }}
+        {{ headerOrcolumn(i) }}
       </th>
     </tr>
     <tr v-for="n in rows" :key="`row-${n}`">
@@ -30,6 +30,7 @@ export default {
     cols: { default: 3 },
     rows: { default: 3 },
     rich: { default: false },
+    headers: Array,
     cellClass: {
       default() {
         return {};
@@ -58,10 +59,11 @@ export default {
       if (this.cellClass[alphaCol]) css.push(this.cellClass[alphaCol]);
       if (this.cellClass[alphaRow]) css.push(this.cellClass[alphaRow]);
       if (this.cellClass[alphaCell]) css.push(this.cellClass[alphaCell]);
+      if (this.cellClass['*']) css.push(this.cellClass['*']);
       return css.join(" ");
     },
     keyup(event) {
-      if (!this.$el.contains(event.originalTarget)) {
+      if (!this.$el.contains(event.originalTarget || event.target)) {
         return;
       }
       const keyName = event.key;
@@ -134,6 +136,12 @@ export default {
           document.execCommand("selectall", null, false);
         });
       });
+    },
+    headerOrcolumn(i) {
+      if (this.headers) {
+        return this.headers[i-1] || this.column(i);
+      }
+      return this.column(i);
     },
     column(i) {
       i--;

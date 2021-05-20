@@ -1,5 +1,6 @@
 {
     "name": "coredump/frontend",
+    "version": "0.1.0",
     "description": "Coredump Vue Frontend",
     "keywords": [
         "coredump",
@@ -7,7 +8,6 @@
         "frontend"
     ],
     "homepage": "https://github.com/coredump/frontend",
-    "minimum-stability": "dev",
     "license": "MIT",
     "type": "library",
     "authors": [
@@ -19,7 +19,8 @@
     ],
     "require": {
         "php": "^7.1",
-        "coredump/jdd-flow": "9999999-dev",
+        "coredump/jdd-api": "^0.3.0",
+        "coredump/jdd-flow": "^0.2.1",
         "illuminate/support": "^6.0|^7.0|^8.0"
     },
     "require-dev": {

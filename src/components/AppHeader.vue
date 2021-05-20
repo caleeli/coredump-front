@@ -1,6 +1,6 @@
 <template>
   <b-navbar toggleable="md" type="dark" variant="info">
-    <b-navbar-brand>{{ title }}</b-navbar-brand>
+    <b-navbar-brand :to="{name: 'home'}">{{ title }}</b-navbar-brand>
 
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
     <b-collapse id="nav-collapse" is-nav>
@@ -66,7 +66,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .nav-link {
   color: white!important;
 }

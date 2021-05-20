@@ -6,18 +6,22 @@
     <b-card-body v-else>
       <b-link @click="callProcess" class="d-flex align-items-end process-link">
         <i class="material-icons process-icon">{{ icon }}</i>
-        <span>{{ name || process.name }}</span>
+        <span>{{ name }}</span>
       </b-link>
-      <small class="process-description">{{ description }}</small>
+      <small v-if="description" class="process-align d-inline-block">
+        <div>{{ description }}</div>
+      </small>
+      <screen v-if="screenContent" :screen-content="screenContent" />
     </b-card-body>
   </b-card>
 </template>
 
 <script>
 import RunProcess from "./RunProcess.vue";
+import Screen from './Screen.vue';
 
 export default {
-  components: { RunProcess },
+  components: { RunProcess, Screen },
   props: {
     bpmn: String,
     instanceId: Number,
@@ -27,12 +31,10 @@ export default {
     icon: { type: String, default: "play_circle" },
     name: String,
     description: String,
+    screenContent: String,
   },
   data() {
     return {
-      process: {
-        name: "",
-      },
       runProps: {
         bpmn: this.bpmn,
         processId: this.processId,
@@ -66,17 +68,13 @@ export default {
       }
     },
   },
-  mounted() {
-    if (!this.name && this.bpmn) {
-      this.$process(this.bpmn, this.processId).then((process) => {
-        this.process = process;
-      });
-    }
-  },
 };
 </script>
 
 <style>
+.material-icons {
+  font-size: inherit;
+}
 .process-link:hover {
   text-decoration: none !important;
 }
@@ -87,7 +85,7 @@ export default {
   font-size: 191%;
   width: 28pt;
 }
-.process-description {
-  margin-left: 28pt;
+.process-align {
+  margin-left: 0pt;
 }
 </style>

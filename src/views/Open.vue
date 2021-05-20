@@ -1,7 +1,8 @@
 <template>
-  <div>
+  <div class="overflow-auto h-100">
     <app-header />
-    <run-process v-bind="runProps" class="m-2" />
+    <b-breadcrumb :items="breadcrumb"></b-breadcrumb>
+    <run-process v-bind="runProps" class="m-2" @loadToken="loadToken" @loadInstance="loadInstance" />
   </div>
 </template>
 
@@ -11,6 +12,31 @@ export default {
   components: { RunProcess },
   data() {
     return {
+      breadcrumb: [
+        {
+          text: this.__("Home"),
+          to: { name: "home" },
+        },
+        {
+          text: "Open",
+          to: {
+            name: "open",
+            params: {
+              instanceId: parseInt(this.$route.params.instanceId),
+            },
+          },
+        },
+        {
+          text: "...",
+          to: {
+            name: "open",
+            params: {
+              instanceId: parseInt(this.$route.params.instanceId),
+              tokenId: parseInt(this.$route.params.tokenId),
+            },
+          },
+        },
+      ],
       runProps: {
         bpmn: this.$route.params.bpmn,
         processId: this.$route.params.processId,
@@ -19,6 +45,14 @@ export default {
         runInCard: false,
       },
     };
+  },
+  methods: {
+    loadInstance(instance) {
+      this.breadcrumb[1].text = instance.attributes.name;
+    },
+    loadToken(token) {
+      this.breadcrumb[2].text = token.attributes.name;
+    },
   },
 };
 </script>
