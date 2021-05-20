@@ -71,6 +71,48 @@ Vue.prototype.__ = (text, ...args) => {
 }
 Vue.prototype.$t = Vue.prototype.__
 
+// Boot workflow
+Vue.prototype.$completeTask = function (token, data = {}) {
+  return this.$root.bpmn.complete(data, token.id);
+}
+Vue.prototype.$callProcess = function (bpmn, processId, data = {}) {
+  return this.$root.bpmn.$instance.call(null, 'callProcess', { bpmn, processId, data })
+}
+Vue.prototype.$cancelInstance = function (instance) {
+  return this.$root.bpmn.$instance.call(instance.id, 'cancel', {})
+}
+Vue.prototype.$instanceScreen = function (instanceId) {
+  return this.$root.bpmn.$instance.call(instanceId, 'getScreen', {})
+}
+Vue.prototype.$instance = function (instanceId, params) {
+  params.t = new Date().getTime();
+  return this.$root.bpmn.$instance.load(instanceId, params);
+}
+Vue.prototype.$findInstances = function (params) {
+  return this.$root.bpmn.$instance.index(params);
+}
+Vue.prototype.$process = function (bpmn, processId) {
+  return this.$root.bpmn.$instance.call(null, 'getProcess', { bpmn, processId });
+}
+Vue.prototype.$tokens = function () {
+  return this.$root.bpmn.$tokens;
+}
+Vue.prototype.$listenInstanceUpdate = function (instance, owner, method) {
+  this.$root.addListener(`Process.${instance.id}`, '.ProcessUpdated', owner, method);
+}
+Vue.prototype.$listenInstanceEvent = function (instance, event, owner, method) {
+  this.$root.addListener(`Process.${instance.id}`, event, owner, method);
+}
+Vue.prototype.$removeOwnerListeners = function (owner) {
+  this.$root.removeOwnerListeners(owner);
+}
+Vue.prototype.$sendMessage = function (instance, targetId, messageId, data = {}) {
+  return this.$root.bpmn.$instance.call(instance.id, 'sendMessage', { targetId, messageId, data });
+}
+Vue.prototype.$cancelInstance = function (instance) {
+  return this.$root.bpmn.$instance.call(instance.id, 'cancel', {});
+}
+
 // Publish globals
 window.router = router
 window.userId = meta('user-id')
