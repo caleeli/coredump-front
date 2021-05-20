@@ -6,5 +6,5 @@
     "exclude": [
         "node_modules"
     ],
-    "include": ["resources/js/**/*"]
+    "include": ["src/**/*"]
 }

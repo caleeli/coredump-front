@@ -33,39 +33,29 @@ class FrontendServiceProvider extends ServiceProvider
         app('config')->push('jsonapi.models', 'Coredump\Frontend\Models');
 
         // Register bpmn files
-        app('config')->push('workflow.processes', __DIR__ . '/../bpmn/core/*/*.bpmn');
+        app('config')->push('workflow.processes', config('frontend.modules.core') . '/*/*.bpmn');
 
         // Register global screens
         app('config')->push('screens', __DIR__ . '/../bpmn/core/*.global.vue');
 
         // Register Module Manager
         ModuleManager::$path = __DIR__ . '/../bpmn/templates';
-        app('config')->push('workflow.processes', __DIR__ . '/../bpmn/deployed/*/*.bpmn');
-        ModuleManager::$deployedPath = __DIR__ . '/../bpmn/deployed';
-        app('config')->push('screens', __DIR__ . '/../bpmn/deployed/*/*.global.vue');
+        app('config')->push('workflow.processes', config('frontend.modules.deployed') . '/*/*.bpmn');
+        ModuleManager::$deployedPath = config('frontend.modules.deployed');
+        app('config')->push('screens', config('frontend.modules.deployed') . '/*/*.global.vue');
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/config.php' => config_path('frontend.php'),
+                __DIR__.'/../config/frontend.php' => config_path('frontend.php'),
             ], static::PluginName . '/config');
-
-            // Publishing the views.
-            /*$this->publishes([
-                __DIR__.'/../resources/views' => resource_path('views/vendor/frontend'),
-            ], 'views');*/
 
             // Publishing assets.
             $this->publishes([
                 __DIR__.'/../dist' => public_path('modules/' . static::PluginName),
             ], static::PluginName . '/assets');
-            $this->publishes([
-                __DIR__.'/../node_modules/@processmaker/modeler/dist/img' => public_path('modules/coredump/frontend/js/img'),
-            ], static::PluginName . '/assets');
-    
-            // Publishing the translation files.
-            /*$this->publishes([
-                __DIR__.'/../resources/lang' => resource_path('lang/vendor/frontend'),
-            ], 'lang');*/
+            // $this->publishes([
+            //     __DIR__.'/../node_modules/@processmaker/modeler/dist/img' => public_path('modules/coredump/frontend/js/img'),
+            // ], static::PluginName . '/assets');
 
             // Registering package commands.
             $this->commands([
@@ -83,10 +73,9 @@ class FrontendServiceProvider extends ServiceProvider
     public function register()
     {
         // Automatically apply the package configuration
-        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'frontend');
         app()->config["filesystems.disks.modules_deployed"] = [
             'driver' => 'local',
-            'root' => __DIR__ . '/../bpmn/deployed',
+            'root' => config('frontend.modules.deployed'),
         ];
 
         // Register the main class to use with the facade

@@ -24,7 +24,6 @@
     "laravel-echo": "^1.10.0",
     "monaco-editor-webpack-plugin": "1.9.*",
     "socket.io-client": "^2.3.0",
-    "style-it": "^2.1.4",
     "vue": "^2.6.11",
     "vue-monaco": "^1.2.2",
     "vue-router": "^3.5.1",
