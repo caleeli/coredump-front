@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build src/index.js",
     "watch": "vue-cli-service build --watch src/index.js",
     "lint": "vue-cli-service lint",
     "storybook": "start-storybook -p 6006 -s ./node_modules/@processmaker/modeler/dist",
