@@ -34,25 +34,8 @@ class JddPackageUpdate extends Command
         if (!\file_exists(\config_path('frontend.php'))) {
             $this->call('vendor:publish', ['--tag' => FrontendServiceProvider::PluginName . '/config', '--force' => true]);
         }
-        $this->installDashboard();
         if (!\file_exists(\storage_path('modules'))) {
             \mkdir(\storage_path('modules'));
         }
-    }
-
-    private function installDashboard()
-    {
-        Dashboard::firstOrCreate([
-            'key' => 'modules',
-        ], [
-            'name' => 'Crear Modulo',
-            'key' => 'modules',
-            'description' => 'Crea un nuevo modulo',
-            'icon' => 'developer_board',
-            'bpmn' => 'modules.bpmn',
-            'process_id' => 'PROCESS_1',
-            'screen' => './modules.vue',
-            'role' => 'admin',
-        ]);
     }
 }
