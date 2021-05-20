@@ -31,7 +31,13 @@ class JddPackageUpdate extends Command
     public function handle()
     {
         $this->call('vendor:publish', ['--tag' => FrontendServiceProvider::PluginName . '/assets', '--force' => true]);
+        if (!\file_exists(\config_path('frontend.php'))) {
+            $this->call('vendor:publish', ['--tag' => FrontendServiceProvider::PluginName . '/config', '--force' => true]);
+        }
         $this->installDashboard();
+        if (!\file_exists(\storage_path('modules'))) {
+            \mkdir(\storage_path('modules'));
+        }
     }
 
     private function installDashboard()

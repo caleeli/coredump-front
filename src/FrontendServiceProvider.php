@@ -36,10 +36,10 @@ class FrontendServiceProvider extends ServiceProvider
         app('config')->push('workflow.processes', config('frontend.modules.core') . '/*/*.bpmn');
 
         // Register global screens
-        app('config')->push('screens', __DIR__ . '/../bpmn/core/*.global.vue');
+        app('config')->push('screens', config('frontend.modules.core') . '/*/*.global.vue');
 
         // Register Module Manager
-        ModuleManager::$path = __DIR__ . '/../bpmn/templates';
+        ModuleManager::$path = config('frontend.templates');
         app('config')->push('workflow.processes', config('frontend.modules.deployed') . '/*/*.bpmn');
         ModuleManager::$deployedPath = config('frontend.modules.deployed');
         app('config')->push('screens', config('frontend.modules.deployed') . '/*/*.global.vue');
@@ -53,9 +53,6 @@ class FrontendServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__.'/../dist' => public_path('modules/' . static::PluginName),
             ], static::PluginName . '/assets');
-            // $this->publishes([
-            //     __DIR__.'/../node_modules/@processmaker/modeler/dist/img' => public_path('modules/coredump/frontend/js/img'),
-            // ], static::PluginName . '/assets');
 
             // Registering package commands.
             $this->commands([
