@@ -20,7 +20,7 @@
     "require": {
         "php": "^7.1",
         "coredump/jdd-api": "^0.3.0",
-        "coredump/jdd-flow": "^0.2.1",
+        "coredump/jdd-flow": "^0.2.2",
         "illuminate/support": "^6.0|^7.0|^8.0"
     },
     "require-dev": {
