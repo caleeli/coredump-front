@@ -39,7 +39,7 @@ class FrontendServiceProvider extends ServiceProvider
         app('config')->push('screens', config('frontend.modules.core') . '/*/*.global.vue');
 
         // Register Module Manager
-        ModuleManager::$path = config('frontend.templates');
+        ModuleManager::$path = config('frontend.modules.templates');
         app('config')->push('workflow.processes', config('frontend.modules.deployed') . '/*/*.bpmn');
         ModuleManager::$deployedPath = config('frontend.modules.deployed');
         app('config')->push('screens', config('frontend.modules.deployed') . '/*/*.global.vue');
